@@ -2,7 +2,11 @@ import { useState } from 'react'
 import './App.css'
 import NavSidebar from './components/NavSidebar'
 import Home from './pages/Home'
+import Movies from './pages/Movies'
+import TvSeries from './pages/TvSeries'
+import Bookmarked from './pages/Bookmarked'
 import data from './data.json'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
   const [movies, setMovies] = useState(data.movies)
@@ -25,11 +29,16 @@ function App() {
       <div className='w-full h-full flex gap-6'>
         <NavSidebar />
         <main className='h-full w-full overflow-y-auto'>
-          <Home 
-            movies={movies}
-            setMovies={setMovies}
-            toggleBookmark={toggleBookmark}
-          />
+            <Routes>
+              <Route path='/' element={<Home 
+                                          movies={movies}
+                                          toggleBookmark={toggleBookmark}
+                                        />}
+              />
+              <Route path='/movies' element={<Movies />}/>
+              <Route path='/tvseries' element={<TvSeries />}/>
+              <Route path='/bookmarked' element={<Bookmarked />}/>
+            </Routes>
         </main>
       </div>
     </>
