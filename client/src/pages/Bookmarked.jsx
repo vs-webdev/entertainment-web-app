@@ -1,9 +1,55 @@
-import React from 'react'
+import MediaCard from "../components/MediaCard";
+import Search from "../components/Search"
 
-const Bookmarked = () => {
+const Bookmarked = ({movies, toggleBookmark}) => {
+  const handleSearch = (e) => null;
+
   return (
-    <div>
-      
+    <div className="h-full w-full">
+      <Search 
+        placeholder={"Search for movies or TV series"}
+        handleSearch={handleSearch}
+      />
+
+      <div className="flex flex-col w-full items-start mb-8">
+        <h2 className="text-3xl mb-7">
+          Bookmarked Movies
+        </h2>
+          <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] w-full gap-8">
+            {movies.filter(movie =>  movie.category === 'Movie' && movie.isBookmarked).map((movie, index) => (
+              <li key={index}>
+                <MediaCard
+                  title={movie.title}
+                  year={movie.year}
+                  category={movie.category}
+                  rating={movie.rating}
+                  isBookmarked={movie.isBookmarked}
+                  toggleBookmark={toggleBookmark}
+                />
+              </li>
+            ))}
+          </ul>
+      </div>
+
+      <div className="flex flex-col items-start">
+        <h2 className="text-3xl mb-7">
+          Bookmarked TV Series
+        </h2>
+        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_318px))] gap-8 w-full">
+          {movies.filter(movie => movie.category === 'TV Series' && movie.isBookmarked).map((movie, index) => (
+            <li key={index}>
+              <MediaCard
+                title={movie.title}
+                year={movie.year}
+                category={movie.category}
+                rating={movie.rating}
+                isBookmarked={movie.isBookmarked}
+                toggleBookmark={toggleBookmark}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
