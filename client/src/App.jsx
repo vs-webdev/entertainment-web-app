@@ -10,6 +10,7 @@ import { Route, Routes } from 'react-router-dom'
 
 function App() {
   const [movies, setMovies] = useState(data.movies)
+
   const toggleBookmark = (title) => {
     setMovies(prev => {
       const updated = [...prev]
@@ -30,14 +31,10 @@ function App() {
         <NavSidebar />
         <main className='h-full w-full overflow-y-auto'>
             <Routes>
-              <Route path='/' element={<Home 
-                                          movies={movies}
-                                          toggleBookmark={toggleBookmark}
-                                        />}
-              />
-              <Route path='/movies' element={<Movies />}/>
-              <Route path='/tvseries' element={<TvSeries />}/>
-              <Route path='/bookmarked' element={<Bookmarked />}/>
+              <Route path='/' element={<Home movies={movies} toggleBookmark={toggleBookmark} />} />
+              <Route path='/movies' element={<Movies movies={movies} toggleBookmark={toggleBookmark} />}/>
+              <Route path='/tvseries' element={<TvSeries movies={movies} toggleBookmark={toggleBookmark} />}/>
+              <Route path='/bookmarked' element={<Bookmarked movies={movies} toggleBookmark={toggleBookmark} />}/>
             </Routes>
         </main>
       </div>

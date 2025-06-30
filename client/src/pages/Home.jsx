@@ -19,19 +19,20 @@ const Home = ({movies, toggleBookmark}) => {
           Trending
         </h2>
         <div className="w-full flex overflow-x-auto">
-          <div className="w-auto flex gap-8">
+          <ul className="w-auto flex gap-8">
             {movies.filter(movie => movie.isTrending).map((movie, index) => (
-              <TrendingMediaCard 
-                index={index}
-                title={movie.title}
-                year={movie.year}
-                category={movie.category}
-                rating={movie.rating}
-                isBookmarked={movie.isBookmarked}
-                toggleBookmark={toggleBookmark}
-              />
+              <li key={index}>
+                <TrendingMediaCard
+                  title={movie.title}
+                  year={movie.year}
+                  category={movie.category}
+                  rating={movie.rating}
+                  isBookmarked={movie.isBookmarked}
+                  toggleBookmark={toggleBookmark}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
@@ -39,19 +40,20 @@ const Home = ({movies, toggleBookmark}) => {
         <h2 className="text-3xl mb-7">
           Recommended for you
         </h2>
-        <div className="grid grid-cols-4 gap-8 w-full">
+        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
           {movies.map((movie, index) => (
-            <MediaCard 
-              index={index} 
-              title={movie.title}
-              year={movie.year}
-              category={movie.category}
-              rating={movie.rating}
-              isBookmarked={movie.isBookmarked}
-              toggleBookmark={toggleBookmark}
-            />
+            <li key={index}>
+              <MediaCard
+                title={movie.title}
+                year={movie.year}
+                category={movie.category}
+                rating={movie.rating}
+                isBookmarked={movie.isBookmarked}
+                toggleBookmark={toggleBookmark}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   )

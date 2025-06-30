@@ -34,7 +34,7 @@ const TvSeriesIcon = ({className}) => (
 
 const BookmarkedIcon = ({className}) => ( 
   <svg
-    viewBox={"0 0 20 17 20"}
+    viewBox={"0 0 17 20"}
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
@@ -45,10 +45,10 @@ const BookmarkedIcon = ({className}) => (
 const NavSidebar = () => {
 
   const navItems = [
-    {icon: HomeIcon, to: '/', alt: 'Home'},
-    {icon: MoviesIcon, to: '/movies', alt: 'Movies'},
-    {icon: TvSeriesIcon, to: '/tvseries', alt: 'TvSeries'},
-    {icon: BookmarkedIcon, to: '/bookmarked', alt: 'Bookmarked'},
+    {icon: HomeIcon, to: '/'},
+    {icon: MoviesIcon, to: '/movies'},
+    {icon: TvSeriesIcon, to: '/tvseries'},
+    {icon: BookmarkedIcon, to: '/bookmarked'},
   ]
 
   return (
