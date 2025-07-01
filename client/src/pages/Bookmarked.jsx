@@ -1,17 +1,35 @@
+import { useState } from "react";
 import MediaCard from "../components/MediaCard";
-import Search from "../components/Search"
+import SearchBar from "../components/SearchBar"
+import SearchResults from "../components/SearchResults";
 
-const Bookmarked = ({movies, toggleBookmark}) => {
-  const handleSearch = (e) => null;
+const Bookmarked = ({movies, toggleBookmark, showSearch, searchText, setSearchText}) => {
+  const [searchMediaContent, setSearchMediaContent] = useState(movies.filter(movie => movie.isBookmarked))
+
+  const handleOnSearchChange = (text) => {
+    setSearchText(text)
+    const newMedia = [...movies.filter(movie => 
+      movie.isBookmarked && movie.title.toLowerCase().includes(text.toLowerCase())
+    )]
+    setSearchMediaContent(newMedia)
+  }
 
   return (
     <div className="h-full w-full">
-      <Search 
+      <SearchBar
         placeholder={"Search for movies or TV series"}
-        handleSearch={handleSearch}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        handleOnSearchChange={handleOnSearchChange}
       />
 
-      <div className="flex flex-col w-full items-start mb-8">
+    {showSearch ? 
+      <SearchResults 
+        searchText={searchText}
+        searchMediaContent={searchMediaContent}
+        toggleBookmark={toggleBookmark}
+      /> :
+      <><div className="flex flex-col w-full items-start mb-8">
         <h2 className="text-3xl mb-7">
           Bookmarked Movies
         </h2>
@@ -49,7 +67,7 @@ const Bookmarked = ({movies, toggleBookmark}) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div></>}
     </div>
   )
 }

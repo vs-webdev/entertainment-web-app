@@ -1,20 +1,35 @@
+import { useState } from "react"
 import MediaCard from "../components/MediaCard"
-import Search from "../components/Search"
+import SearchBar from "../components/SearchBar"
 import TrendingMediaCard from "../components/TrendingMediaCard"
+import SearchResults from "../components/SearchResults"
 
-const Home = ({movies, toggleBookmark}) => {
-  const handleSearch = (e) => {
+const Home = ({movies, toggleBookmark, showSearch, searchText, setSearchText}) => {
 
+  const [searchMediaContent, setSearchMediaContent] = useState(movies)
+
+  const handleOnSearchChange = (text) => {
+    setSearchText(text)
+    const newMedia = [...movies.filter(movie => movie.title.toLowerCase().includes(text.toLowerCase()))]
+    setSearchMediaContent(newMedia)
   }
 
   return (
     <div className="h-full w-full">
-      <Search 
+      <SearchBar 
         placeholder={"Search for movies or TV series"}
-        handleSearch={handleSearch}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        handleOnSearchChange={handleOnSearchChange}
       />
 
-      <div className="flex flex-col items-start mb-8">
+      {showSearch ? 
+      <SearchResults 
+        searchText={searchText}
+        searchMediaContent={searchMediaContent}
+        toggleBookmark={toggleBookmark}
+      /> :
+      <><div className="flex flex-col items-start mb-8">
         <h2 className="text-3xl mb-7">
           Trending
         </h2>
@@ -29,7 +44,7 @@ const Home = ({movies, toggleBookmark}) => {
                   rating={movie.rating}
                   isBookmarked={movie.isBookmarked}
                   toggleBookmark={toggleBookmark}
-                />
+                  />
               </li>
             ))}
           </ul>
@@ -54,7 +69,8 @@ const Home = ({movies, toggleBookmark}) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div></>
+      }
     </div>
   )
 }

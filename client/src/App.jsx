@@ -1,15 +1,21 @@
-import { useState } from 'react'
 import './App.css'
+import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import NavSidebar from './components/NavSidebar'
 import Home from './pages/Home'
 import Movies from './pages/Movies'
 import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
 import data from './data.json'
-import { Route, Routes } from 'react-router-dom'
 
 function App() {
   const [movies, setMovies] = useState(data.movies)
+  const [showSearch, setShowSearch] = useState(false)
+  const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    searchText.trim().length === 0 ? setShowSearch(false) : setShowSearch(true)
+  }, [searchText])
 
   const toggleBookmark = (title) => {
     setMovies(prev => {
@@ -29,12 +35,40 @@ function App() {
     <>
       <div className='w-full h-full flex gap-6'>
         <NavSidebar />
-        <main className='h-full w-full overflow-y-auto'>
+        <main className='h-full pt-6 w-full overflow-y-auto'>
             <Routes>
-              <Route path='/' element={<Home movies={movies} toggleBookmark={toggleBookmark} />} />
-              <Route path='/movies' element={<Movies movies={movies} toggleBookmark={toggleBookmark} />}/>
-              <Route path='/tvseries' element={<TvSeries movies={movies} toggleBookmark={toggleBookmark} />}/>
-              <Route path='/bookmarked' element={<Bookmarked movies={movies} toggleBookmark={toggleBookmark} />}/>
+              <Route path='/' element={<Home
+                movies={movies} 
+                toggleBookmark={toggleBookmark} 
+                showSearch={showSearch}
+                setShowSearch={setShowSearch}
+                searchText={searchText}
+                setSearchText={setSearchText}
+                />} />
+              <Route path='/movies' element={<Movies 
+                movies={movies}
+                toggleBookmark={toggleBookmark} 
+                showSearch={showSearch}
+                setShowSearch={setShowSearch}
+                searchText={searchText}
+                setSearchText={setSearchText}
+                />}/>
+              <Route path='/tvseries' element={<TvSeries 
+                movies={movies}
+                toggleBookmark={toggleBookmark} 
+                showSearch={showSearch}
+                setShowSearch={setShowSearch}
+                searchText={searchText}
+                setSearchText={setSearchText}
+                />}/>
+              <Route path='/bookmarked' element={<Bookmarked 
+                movies={movies}
+                toggleBookmark={toggleBookmark} 
+                showSearch={showSearch}
+                setShowSearch={setShowSearch}
+                searchText={searchText}
+                setSearchText={setSearchText}
+              />}/>
             </Routes>
         </main>
       </div>
