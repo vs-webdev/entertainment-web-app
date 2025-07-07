@@ -62,8 +62,7 @@ const NavSidebar = () => {
                   {({isActive}) => (
                     <Icon
                       className={`md:h-[20px] md:w-[20px] fill-current ${isActive ? 'text-white' : 'text-[#5A698F]'} h-4 w-4 hover:fill-red-400`}
-                    />
-                  )}
+                    />)}
                 </NavLink>
               </li>)}
         </ul>

@@ -6,10 +6,8 @@ import Home from './pages/Home'
 import Movies from './pages/Movies'
 import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
-import data from './data.json'
 
 function App() {
-  const [movies, setMovies] = useState(data.movies)
   const [showSearch, setShowSearch] = useState(false)
   const [searchText, setSearchText] = useState('')
 
@@ -38,7 +36,6 @@ function App() {
         <main className='h-full pt-6 w-full overflow-y-auto'>
             <Routes>
               <Route path='/' element={<Home
-                movies={movies} 
                 toggleBookmark={toggleBookmark} 
                 showSearch={showSearch}
                 setShowSearch={setShowSearch}
@@ -46,7 +43,6 @@ function App() {
                 setSearchText={setSearchText}
                 />} />
               <Route path='/movies' element={<Movies 
-                movies={movies}
                 toggleBookmark={toggleBookmark} 
                 showSearch={showSearch}
                 setShowSearch={setShowSearch}
@@ -54,7 +50,6 @@ function App() {
                 setSearchText={setSearchText}
                 />}/>
               <Route path='/tvseries' element={<TvSeries 
-                movies={movies}
                 toggleBookmark={toggleBookmark} 
                 showSearch={showSearch}
                 setShowSearch={setShowSearch}
@@ -62,7 +57,6 @@ function App() {
                 setSearchText={setSearchText}
                 />}/>
               <Route path='/bookmarked' element={<Bookmarked 
-                movies={movies}
                 toggleBookmark={toggleBookmark} 
                 showSearch={showSearch}
                 setShowSearch={setShowSearch}

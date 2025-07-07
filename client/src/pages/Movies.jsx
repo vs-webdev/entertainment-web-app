@@ -2,13 +2,21 @@ import { useState } from "react";
 import MediaCard from "../components/MediaCard";
 import SearchBar from "../components/SearchBar"
 import SearchResults from "../components/SearchResults";
+import { useEffect } from "react";
+import Pagination from "../components/Pagination";
+import { useMedia } from "../context/MediaContext";
 
-const Movies = ({movies, toggleBookmark, showSearch, searchText, setSearchText}) => {
-  const [searchMediaContent, setSearchMediaContent] = useState(movies.filter(movie => movie.category === 'Movie'))
+const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
+  const {movieMedia, fetchMovieMedia, currentPage} = useMedia()
+  const [searchMediaContent, setSearchMediaContent] = useState(movieMedia.filter(movie => movie.category === 'Movie'))
+
+  useEffect(() => {
+    fetchMovieMedia()
+  }, [currentPage])
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
-    const newMedia = [...movies.filter(movie => 
+    const newMedia = [...movieMedia.filter(movie => 
       movie.category === 'Movie' && movie.title.toLowerCase().includes(text.toLowerCase())
     )]
     setSearchMediaContent(newMedia)
@@ -34,20 +42,22 @@ const Movies = ({movies, toggleBookmark, showSearch, searchText, setSearchText})
             Movies
           </h2>
           <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
-            {movies.filter(movie => movie.category === 'Movie').map((movie, index) => (
+            {movieMedia.map((movie, index) => (
               <li key={index}>
                 <MediaCard
                   title={movie.title}
-                  year={movie.year}
-                  category={movie.category}
-                  rating={movie.rating}
+                  year={movie.release_date}
+                  category={'Movie'}
+                  rating={movie.certification}
                   isBookmarked={movie.isBookmarked}
                   toggleBookmark={toggleBookmark}
+                  posterImg={movie.backdrop_path}
                 />
               </li>
             ))}
           </ul>
         </div></>}
+        <Pagination />
     </div>
   )
 }

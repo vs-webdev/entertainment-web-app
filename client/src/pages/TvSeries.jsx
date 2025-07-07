@@ -1,15 +1,22 @@
-import { useState } from "react";
 import MediaCard from "../components/MediaCard";
 import SearchBar from "../components/SearchBar"
 import SearchResults from "../components/SearchResults";
+import { useEffect, useState } from "react";
+import Pagination from "../components/Pagination";
+import { useMedia } from "../context/MediaContext";
 
-const TvSeries = ({movies, toggleBookmark, showSearch, searchText, setSearchText}) => {
-  const [searchMediaContent, setSearchMediaContent] = useState(movies.filter(movie => movie.category === 'TV Series'))
+const TvSeries = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
+  const {tvMedia, fetchTvSeriesMedia, currentPage} = useMedia()
+  const [searchMediaContent, setSearchMediaContent] = useState(tvMedia?.filter(media => media.category === 'TV Series'))
+
+  useEffect(() => {
+    fetchTvSeriesMedia()
+  }, [currentPage])
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
-    const newMedia = [...movies.filter(movie => 
-      movie.category === 'TV Series' && movie.title.toLowerCase().includes(text.toLowerCase())
+    const newMedia = [...tvMedia.filter(media => 
+      media.category === 'TV Series' && media.title.toLowerCase().includes(text.toLowerCase())
     )]
     setSearchMediaContent(newMedia)
   }
@@ -34,20 +41,21 @@ const TvSeries = ({movies, toggleBookmark, showSearch, searchText, setSearchText
             TV Series
           </h2>
           <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
-            {movies.filter(movie => movie.category === 'TV Series').map((movie, index) => (
+            {tvMedia.map((movie, index) => (
               <li key={index}>
                 <MediaCard
-                  title={movie.title}
-                  year={movie.year}
-                  category={movie.category}
+                  title={movie.name}
+                  year={movie.first_air_date}
+                  category={'TV Series'}
                   rating={movie.rating}
                   isBookmarked={movie.isBookmarked}
                   toggleBookmark={toggleBookmark}
+                  posterImg={movie.backdrop_path}
                 />
-              </li>
-            ))}
+              </li>))}
           </ul>
           </div></>}
+          <Pagination />
     </div>
   )
 }
