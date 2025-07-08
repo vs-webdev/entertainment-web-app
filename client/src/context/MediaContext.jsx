@@ -12,6 +12,8 @@ export const useMedia = () => {
 }
 
 export const MediaProvider = ({children}) => {
+  const [trendingMedia, setTrendingMedia] = useState([])
+  const [recommendedMedia, setRecommendedMedia] = useState([])
   const [movieMedia, setMovieMedia] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(10)
@@ -19,21 +21,49 @@ export const MediaProvider = ({children}) => {
   const [tvMedia, setTvMedia] = useState([])
   const API_BASE_URL=import.meta.env.VITE_API_BASE_URL;
 
-  const fetchTvSeriesMedia = async () => {
-    const {data} = await axios.get(`${API_BASE_URL}/api/media/tvseries/?page=${currentPage}`)
-    console.log(data)
-    setTvMedia(data?.data?.results)
+  
+  const fetchHomeMedia = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/media/trending`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+      }
+    })
+    const result = await response.json()
+    console.log(result)
+    setTrendingMedia(result?.data?.results.slice(0,5))
+    setRecommendedMedia(result?.data?.results)
   }
 
   const fetchMovieMedia = async () => {
-    const {data} = await axios.get(`${API_BASE_URL}/api/media/movies/?page=${currentPage}`)
-    console.log(data)
-    setTotalPages(data?.data?.total_pages)
-    setMovieMedia(data?.data?.results)
+    const response = await fetch(`${API_BASE_URL}/api/media/movies/?page=${currentPage}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+      }
+    })
+    const result = await response.json()
+    console.log('result', result)
+    
+    setTotalPages(result?.data?.total_pages)
+    setMovieMedia(result?.data?.results)
+  }
+
+  const fetchTvSeriesMedia = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/media/tvseries/?page=${currentPage}`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+      }
+    })
+    const result = await response.json()
+    console.log(result)
+    setTvMedia(result?.data?.results)
   }
 
   useEffect(() => {
    const windowSize = 10;
+   console.log('hi')
 
   const shiftPages = (offset) => {
     let newStart = pages[0] + offset;
@@ -69,10 +99,11 @@ export const MediaProvider = ({children}) => {
   }, [currentPage])
 
   const value = {
+    trendingMedia, recommendedMedia,
     tvMedia, fetchTvSeriesMedia,
     movieMedia, fetchMovieMedia,
     currentPage, setCurrentPage,
-    pages,
+    pages, fetchHomeMedia,
   }
 
   return (

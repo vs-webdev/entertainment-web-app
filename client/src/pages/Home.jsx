@@ -4,12 +4,11 @@ import MediaCard from "../components/MediaCard"
 import SearchBar from "../components/SearchBar"
 import TrendingMediaCard from "../components/TrendingMediaCard"
 import SearchResults from "../components/SearchResults"
+import { useMedia } from "../context/MediaContext"
 
 const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
-
+  const {fetchHomeMedia, trendingMedia, recommendedMedia} = useMedia()
   const [searchMediaContent, setSearchMediaContent] = useState([])
-  const [trendingMedia, setTrendingMedia] = useState([])
-  const [recommendedMedia, setRecommendedMedia] = useState([])
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
@@ -17,15 +16,8 @@ const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
     setSearchMediaContent(newMedia)
   }
 
-  const fetchData = async () => {
-    const {data} = await axios.get('http://localhost:8000/api/media/trending')
-    console.log(data)
-    setTrendingMedia(data?.data?.results.slice(0,5))
-    setRecommendedMedia(data?.data?.results)
-  }
-
   useEffect(() => {
-    fetchData()
+    fetchHomeMedia()
   }, [])
 
   return (
@@ -49,16 +41,16 @@ const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
         </h2>
         <div className="w-full flex overflow-x-auto">
           <ul className="w-auto flex gap-8">
-            {trendingMedia.map((movie, index) => (
+            {trendingMedia?.map((movie, index) => (
               <li key={index}>
                 <TrendingMediaCard
-                  title={movie.title || movie.name}
-                  year={movie.release_date || movie.first_air_date}
-                  category={movie.media_type}
-                  rating={movie.certification}
-                  isBookmarked={movie.isBookmarked}
+                  title={movie?.title || movie?.name}
+                  year={movie?.release_date || movie?.first_air_date}
+                  category={movie?.media_type}
+                  rating={movie?.certification}
+                  isBookmarked={movie?.isBookmarked}
                   toggleBookmark={toggleBookmark}
-                  posterImg={movie.backdrop_path}
+                  posterImg={movie?.backdrop_path}
                   />
               </li>
             ))}
@@ -71,7 +63,7 @@ const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
           Recommended for you
         </h2>
         <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
-          {recommendedMedia.map((movie, index) => (
+          {recommendedMedia?.map((movie, index) => (
             <li key={index}>
               <MediaCard
                   title={movie.title || movie.name}

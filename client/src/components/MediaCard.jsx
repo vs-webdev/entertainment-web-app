@@ -30,7 +30,7 @@ const MediaCard = ({year, category, rating, title, isBookmarked, toggleBookmark,
       </div>
 
       <div className='flex items-center gap-2 mb-1'>
-        <span>{year.slice(0, 4)}</span>
+        <span>{year?.slice(0, 4)}</span>
         <span className='flex items-center capitalize gap-2 before:content-["\00B7"] before:font-extrabold before:inline-block before:align-middle after:content-["\00B7"] after:inline-block after:font-extrabold after:align-middle'>
           <img src={movieTag} alt="Moive Tag" className='w-4 h-4' />
           {category}

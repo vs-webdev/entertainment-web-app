@@ -8,7 +8,7 @@ import { useMedia } from "../context/MediaContext";
 
 const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
   const {movieMedia, fetchMovieMedia, currentPage} = useMedia()
-  const [searchMediaContent, setSearchMediaContent] = useState(movieMedia.filter(movie => movie.category === 'Movie'))
+  const [searchMediaContent, setSearchMediaContent] = useState(movieMedia?.filter(movie => movie.category === 'Movie'))
 
   useEffect(() => {
     fetchMovieMedia()
@@ -42,7 +42,7 @@ const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
             Movies
           </h2>
           <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
-            {movieMedia.map((movie, index) => (
+            {movieMedia?.map((movie, index) => (
               <li key={index}>
                 <MediaCard
                   title={movie.title}

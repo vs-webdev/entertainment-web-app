@@ -41,16 +41,16 @@ const TvSeries = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
             TV Series
           </h2>
           <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
-            {tvMedia.map((movie, index) => (
+            {tvMedia?.map((movie, index) => (
               <li key={index}>
                 <MediaCard
-                  title={movie.name}
-                  year={movie.first_air_date}
+                  title={movie?.name}
+                  year={movie?.first_air_date}
                   category={'TV Series'}
-                  rating={movie.rating}
+                  rating={movie?.rating}
                   isBookmarked={movie.isBookmarked}
                   toggleBookmark={toggleBookmark}
-                  posterImg={movie.backdrop_path}
+                  posterImg={movie?.backdrop_path}
                 />
               </li>))}
           </ul>
