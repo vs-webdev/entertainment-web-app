@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from 'axios';
+import { useLocation } from 'react-router-dom'
+import useDebounce from "../utils/useDebounce";
 
 const MediaContext = createContext(null)
 
@@ -12,6 +13,8 @@ export const useMedia = () => {
 }
 
 export const MediaProvider = ({children}) => {
+  const location = useLocation()
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [trendingMedia, setTrendingMedia] = useState([])
   const [recommendedMedia, setRecommendedMedia] = useState([])
   const [movieMedia, setMovieMedia] = useState([])
@@ -19,8 +22,35 @@ export const MediaProvider = ({children}) => {
   const [totalPages, setTotalPages] = useState(10)
   const [pages, setPages] = useState([1,2,3,4,5,6,7,8,9,10])
   const [tvMedia, setTvMedia] = useState([])
-  const API_BASE_URL=import.meta.env.VITE_API_BASE_URL;
+  const [showSearch, setShowSearch] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [searchMediaContent, setSearchMediaContent] = useState([])
+  const debouncedSearchText = useDebounce(searchText, 500)
 
+  useEffect(() => {
+    if (debouncedSearchText.trim().length === 0 ){
+      setShowSearch(false) 
+      setSearchMediaContent([])
+    } else {
+      setShowSearch(true)
+      fetchSearchMedia()
+    }
+  }, [debouncedSearchText])
+
+  const fetchSearchMedia = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/media/home/search/?search_media=${searchText}`)
+    const data = await response.json()
+    let media = data?.data?.results.filter(media => media.media_type !== 'person') || []
+
+    // filtering media based on path
+    if (location.pathname === '/movies'){
+      media = media.filter(media => media.media_type === 'movie')
+    }
+    if (location.pathname === '/tvseries'){
+      media = media.filter(media => media.media_type === 'tv')
+    }
+    setSearchMediaContent(media)
+  }
   
   const fetchHomeMedia = async () => {
     const response = await fetch(`${API_BASE_URL}/api/media/trending`, {
@@ -104,6 +134,9 @@ export const MediaProvider = ({children}) => {
     movieMedia, fetchMovieMedia,
     currentPage, setCurrentPage,
     pages, fetchHomeMedia,
+    showSearch, setShowSearch,
+    searchText, setSearchText,
+    searchMediaContent, setSearchMediaContent
   }
 
   return (

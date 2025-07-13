@@ -8,12 +8,6 @@ import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
 
 function App() {
-  const [showSearch, setShowSearch] = useState(false)
-  const [searchText, setSearchText] = useState('')
-
-  useEffect(() => {
-    searchText.trim().length === 0 ? setShowSearch(false) : setShowSearch(true)
-  }, [searchText])
 
   const toggleBookmark = (title) => {
     setMovies(prev => {
@@ -36,32 +30,16 @@ function App() {
         <main className='h-full pt-6 w-full overflow-y-auto'>
             <Routes>
               <Route path='/' element={<Home
-                toggleBookmark={toggleBookmark} 
-                showSearch={showSearch}
-                setShowSearch={setShowSearch}
-                searchText={searchText}
-                setSearchText={setSearchText}
+                toggleBookmark={toggleBookmark}
                 />} />
               <Route path='/movies' element={<Movies 
                 toggleBookmark={toggleBookmark} 
-                showSearch={showSearch}
-                setShowSearch={setShowSearch}
-                searchText={searchText}
-                setSearchText={setSearchText}
                 />}/>
               <Route path='/tvseries' element={<TvSeries 
                 toggleBookmark={toggleBookmark} 
-                showSearch={showSearch}
-                setShowSearch={setShowSearch}
-                searchText={searchText}
-                setSearchText={setSearchText}
                 />}/>
               <Route path='/bookmarked' element={<Bookmarked 
                 toggleBookmark={toggleBookmark} 
-                showSearch={showSearch}
-                setShowSearch={setShowSearch}
-                searchText={searchText}
-                setSearchText={setSearchText}
               />}/>
             </Routes>
         </main>

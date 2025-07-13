@@ -1,13 +1,12 @@
 import MediaCard from "../components/MediaCard";
 import SearchBar from "../components/SearchBar"
 import SearchResults from "../components/SearchResults";
-import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
+import { useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 
-const TvSeries = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
-  const {tvMedia, fetchTvSeriesMedia, currentPage} = useMedia()
-  const [searchMediaContent, setSearchMediaContent] = useState(tvMedia?.filter(media => media.category === 'TV Series'))
+const TvSeries = ({toggleBookmark}) => {
+  const {tvMedia, fetchTvSeriesMedia, currentPage, showSearch, searchText, setSearchText} = useMedia()
 
   useEffect(() => {
     fetchTvSeriesMedia()
@@ -15,10 +14,6 @@ const TvSeries = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
-    const newMedia = [...tvMedia.filter(media => 
-      media.category === 'TV Series' && media.title.toLowerCase().includes(text.toLowerCase())
-    )]
-    setSearchMediaContent(newMedia)
   }
 
   return (
@@ -33,7 +28,6 @@ const TvSeries = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
       {showSearch ? 
         <SearchResults 
           searchText={searchText}
-          searchMediaContent={searchMediaContent}
           toggleBookmark={toggleBookmark}
         /> :
         <><div className="flex flex-col items-start">

@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react"
-import axios from 'axios'
+import { useEffect } from "react"
 import MediaCard from "../components/MediaCard"
 import SearchBar from "../components/SearchBar"
 import TrendingMediaCard from "../components/TrendingMediaCard"
 import SearchResults from "../components/SearchResults"
 import { useMedia } from "../context/MediaContext"
 
-const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
-  const {fetchHomeMedia, trendingMedia, recommendedMedia} = useMedia()
-  const [searchMediaContent, setSearchMediaContent] = useState([])
+const Home = ({toggleBookmark, }) => {
+  const {fetchHomeMedia, trendingMedia, recommendedMedia, showSearch, searchText, setSearchText} = useMedia()
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
-    const newMedia = [...movies.filter(movie => movie.title.toLowerCase().includes(text.toLowerCase()))]
-    setSearchMediaContent(newMedia)
   }
 
   useEffect(() => {
@@ -32,7 +28,6 @@ const Home = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
       {showSearch ? 
       <SearchResults 
         searchText={searchText}
-        searchMediaContent={searchMediaContent}
         toggleBookmark={toggleBookmark}
       /> :
       <><div className="flex flex-col items-start mb-8">

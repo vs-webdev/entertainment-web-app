@@ -1,14 +1,12 @@
-import { useState } from "react";
 import MediaCard from "../components/MediaCard";
 import SearchBar from "../components/SearchBar"
 import SearchResults from "../components/SearchResults";
-import { useEffect } from "react";
 import Pagination from "../components/Pagination";
+import { useEffect } from "react";
 import { useMedia } from "../context/MediaContext";
 
-const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
-  const {movieMedia, fetchMovieMedia, currentPage} = useMedia()
-  const [searchMediaContent, setSearchMediaContent] = useState(movieMedia?.filter(movie => movie.category === 'Movie'))
+const Movies = ({toggleBookmark}) => {
+  const {movieMedia, fetchMovieMedia, currentPage, showSearch, searchText, setSearchText} = useMedia()
 
   useEffect(() => {
     fetchMovieMedia()
@@ -16,10 +14,6 @@ const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
 
   const handleOnSearchChange = (text) => {
     setSearchText(text)
-    const newMedia = [...movieMedia.filter(movie => 
-      movie.category === 'Movie' && movie.title.toLowerCase().includes(text.toLowerCase())
-    )]
-    setSearchMediaContent(newMedia)
   }
 
   return (
@@ -34,7 +28,6 @@ const Movies = ({toggleBookmark, showSearch, searchText, setSearchText}) => {
       {showSearch ? 
         <SearchResults 
           searchText={searchText}
-          searchMediaContent={searchMediaContent}
           toggleBookmark={toggleBookmark}
         /> :
         <><div className="flex flex-col items-start">
