@@ -6,6 +6,8 @@ import Home from './pages/Home'
 import Movies from './pages/Movies'
 import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
+import AuthPage from './pages/AuthPage'
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
 
@@ -38,9 +40,11 @@ function App() {
               <Route path='/tvseries' element={<TvSeries 
                 toggleBookmark={toggleBookmark} 
                 />}/>
-              <Route path='/bookmarked' element={<Bookmarked 
-                toggleBookmark={toggleBookmark} 
-              />}/>
+              <Route path='/bookmarked' element={<PrivateRoute >
+                  <Bookmarked toggleBookmark={toggleBookmark}/>
+                </PrivateRoute>}>
+              </Route>
+              <Route path='/auth' element={<AuthPage />}/>
             </Routes>
         </main>
       </div>
