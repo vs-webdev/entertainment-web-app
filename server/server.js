@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-import dotenv from 'dotenv';
 import mediaRouter from './src/routes/media.routes.js';
-
-dotenv.config()
+import { connectDB } from './src/config/db.js';
+import authRouter from './src/routes/auth.routes.js';
 
 const app = express()
 const PORT = process.env.PORT || 5000;
@@ -17,6 +17,10 @@ app.use(cors({
 }))
 
 // routes
-app.use("/api", mediaRouter)
+app.use("/api/media", mediaRouter)
+app.use("/api/auth", authRouter)
 
-app.listen(PORT, () => console.log(PORT))
+app.listen(PORT, () => {
+  connectDB();
+  console.log(`Server started at port ${PORT}`)
+})
