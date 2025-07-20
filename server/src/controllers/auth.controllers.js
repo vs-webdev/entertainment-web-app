@@ -1,24 +1,61 @@
 import userModel from "../models/userModel.js"
+import bcrypt from "bcryptjs"
+import generateToken from "../utils/generateToken.js"
 
 export const register = async (req, res) => {
   const {username, email, password} = req.body
   console.log(username, email, password)
 
   if (!username || !email || !password){
-    res.json({success: false, message: 'Missing Details'})
+    return res.json({success: false, message: 'Missing Details'})
   }
 
   try {
     // Check if the user exists
     const userExist = await userModel.findOne({email})
     if (userExist){
-      res.json({success: false, message: "User already exists"})
+      return res.json({success: false, message: "User already exists"})
     } else {
-      const user = new userModel({username, password, email})
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const user = new userModel({username, password: hashedPassword, email})
       await user.save()
+
+      generateToken(res, user._id)
     }
 
     return res.json({success: true})
+  } catch (error) {
+    res.json({success: false, message: error.message})
+  }
+}
+
+export const login = async (req, res) => {
+  const {email, password} = req.body;
+  console.log(email, password)
+
+  if (!email || !password){
+    return res.json({success: false, message: 'Missing Email or Password'})
+  }
+  
+  try {
+    // Check if email exists
+    const user = await userModel.findOne({email})
+    if (!user){
+      return res.json({success: false, message: 'Email does not exists'})
+    }  
+    // If password doesn't matches
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch){
+      return res.json({success: false, message: 'Wrong Password'})
+    }
+
+    generateToken(res, user._id)
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Access Granted'
+    })
+    
   } catch (error) {
     res.json({success: false, message: error.message})
   }

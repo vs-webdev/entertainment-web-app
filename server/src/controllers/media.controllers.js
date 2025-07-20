@@ -1,4 +1,5 @@
 import { homeMediaUrl, searchMediaUrl, movieMediaUrl, tvSeriesMediaUrl } from "../constants/media.constants.js";
+import userModel from "../models/userModel.js";
 
 const tmdbHeaders = {
   accept: 'application/json',
@@ -102,6 +103,25 @@ export const tvseriesMediaController = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error in tvseriesMediaUrl"
+    })
+  }
+}
+
+export const bookmarkedMediaController = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const user = await userModel.findById(userId)
+    console.log('userId', userId, 'user', user)
+    if (!user){
+      return res.status(404).json({success: false, message: "User not found"})
+    }
+
+    res.json({success: true, bookmarks: user.bookmarks, userId})
+  } catch (error) {
+    res.status(500).json({
+      success: false, 
+      message: "Internal server error in bookmarkedMediaController"
     })
   }
 }
