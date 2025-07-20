@@ -31,7 +31,6 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   const {email, password} = req.body;
-  console.log(email, password)
 
   if (!email || !password){
     return res.json({success: false, message: 'Missing Email or Password'})
@@ -58,5 +57,13 @@ export const login = async (req, res) => {
     
   } catch (error) {
     res.json({success: false, message: error.message})
+  }
+}
+
+export const isAuthenticated = async (req, res) => {
+  try {
+    return res.json({success: true})
+  } catch (error) {
+    return res.json({success: false, message: error.message})
   }
 }
