@@ -1,5 +1,4 @@
 import './App.css'
-import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import NavSidebar from './components/NavSidebar'
 import Home from './pages/Home'
@@ -8,10 +7,16 @@ import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
 import AuthPage from './pages/AuthPage'
 import PrivateRoute from './components/PrivateRoute'
+import {toast, ToastContainer} from 'react-toastify'
+import { useAuth } from './context/AuthContext'
 
 function App() {
+  const {isLoggedIn} = useAuth()
 
-  const toggleBookmark = (title) => {
+  const toggleBookmark = (title, setMovies) => {
+    if (!isLoggedIn) {
+      return toast.error("Log In to bookmark")
+    }
     setMovies(prev => {
       const updated = [...prev]
       const index = updated.findIndex(movie => movie.title === title)
@@ -48,6 +53,7 @@ function App() {
             </Routes>
         </main>
       </div>
+      <ToastContainer />
     </>
   )
 }

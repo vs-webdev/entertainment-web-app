@@ -67,7 +67,9 @@ const NavSidebar = () => {
               </li>)}
         </ul>
       </div>
-      <img className='mt-53 border-white border-2 rounded-full' src={avatar} alt="Avatar" />
+      <NavLink to={'/auth'}>
+        <img className='mt-53 border-white border-2 rounded-full' src={avatar} alt="Avatar" />
+      </NavLink>
     </nav>
   )
 }

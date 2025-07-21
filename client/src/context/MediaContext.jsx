@@ -18,10 +18,11 @@ export const MediaProvider = ({children}) => {
   const [trendingMedia, setTrendingMedia] = useState([])
   const [recommendedMedia, setRecommendedMedia] = useState([])
   const [movieMedia, setMovieMedia] = useState([])
+  const [tvMedia, setTvMedia] = useState([])
+  const [bookmarkMedia, setBookmarkMedia] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(10)
   const [pages, setPages] = useState([1,2,3,4,5,6,7,8,9,10])
-  const [tvMedia, setTvMedia] = useState([])
   const [showSearch, setShowSearch] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [searchMediaContent, setSearchMediaContent] = useState([])
@@ -91,6 +92,19 @@ export const MediaProvider = ({children}) => {
     setTvMedia(result?.data?.results)
   }
 
+  const fetchBookmarkedMedia = async () => {
+    const response = await fetch(`${API_BASE_URL}/api/media/bookmarks`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json'
+      },
+      credentials: 'include'
+    })
+    const result = await response.json()
+    console.log(result)
+    setBookmarkMedia(result?.data?.results)
+  }
+
   useEffect(() => {
    const windowSize = 10;
    console.log('hi')
@@ -132,11 +146,13 @@ export const MediaProvider = ({children}) => {
     trendingMedia, recommendedMedia,
     tvMedia, fetchTvSeriesMedia,
     movieMedia, fetchMovieMedia,
+    bookmarkMedia, setBookmarkMedia,
     currentPage, setCurrentPage,
     pages, fetchHomeMedia,
     showSearch, setShowSearch,
     searchText, setSearchText,
-    searchMediaContent, setSearchMediaContent
+    searchMediaContent, setSearchMediaContent,
+    fetchBookmarkedMedia
   }
 
   return (
