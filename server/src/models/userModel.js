@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   bookmarks: [
     {
       mediaId: {
-        type: String,
+        type: Number,
         required: true,
       },
       mediaType: {
