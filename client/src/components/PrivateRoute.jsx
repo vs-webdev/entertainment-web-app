@@ -4,13 +4,13 @@ import { toast } from "react-toastify"
 import { useEffect } from "react"
 
 const PrivateRoute = ({children}) => {
-  const {isLoggedIn} = useAuth()
-
+  const {isLoggedIn, isAuthLoading} = useAuth()
+  
   useEffect(() => {
     if (!isLoggedIn) toast.error('Log In to access Bookmarks')
   }, [isLoggedIn])
   
-  return isLoggedIn ? children : <Navigate to="/auth" replace />
+  return (!isAuthLoading && isLoggedIn) ? children : <Navigate to="/auth" replace />
 }
 
 export default PrivateRoute

@@ -4,7 +4,6 @@ import generateToken from "../utils/generateToken.js"
 
 export const register = async (req, res) => {
   const {username, email, password} = req.body
-  console.log(username, email, password)
 
   if (!username || !email || !password){
     return res.json({success: false, message: 'Missing Details'})
@@ -62,7 +61,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie('token', {
+    res.clearCookie('jwt', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict'

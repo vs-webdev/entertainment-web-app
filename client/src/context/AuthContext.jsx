@@ -12,6 +12,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({children}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -23,15 +24,27 @@ export const AuthProvider = ({children}) => {
         },
         credentials: "include"
       })
-      const result = await response.json()
-      setIsLoggedIn(result.success)
+      return await response.json()
     }
-    isAuth()
+
+    const check = async () => {
+      try {
+        const res = await isAuth()
+        console.log('check is auth', res.success)
+        setIsLoggedIn(res.success)
+      } catch (error) {
+        setIsLoggedIn(false)
+      } finally {
+        setIsAuthLoading(false)
+      }
+    }
+    check()
   }, [])
 
   const value = {
     isLoggedIn, setIsLoggedIn,
-    API_BASE_URL,
+    API_BASE_URL, isAuthLoading, 
+    setIsAuthLoading,
   }
 
   return (

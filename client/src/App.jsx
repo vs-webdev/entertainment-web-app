@@ -7,27 +7,19 @@ import TvSeries from './pages/TvSeries'
 import Bookmarked from './pages/Bookmarked'
 import AuthPage from './pages/AuthPage'
 import PrivateRoute from './components/PrivateRoute'
-import {toast, ToastContainer} from 'react-toastify'
+import {ToastContainer} from 'react-toastify'
 import { useAuth } from './context/AuthContext'
+import LogoutConfirmation from './components/LogoutConfirmation'
 
 function App() {
-  const {isLoggedIn} = useAuth()
+  const {isLoggedIn, isAuthLoading} = useAuth()
 
-  const toggleBookmark = (title, setMovies) => {
-    if (!isLoggedIn) {
-      return toast.error("Log In to bookmark")
-    }
-    setMovies(prev => {
-      const updated = [...prev]
-      const index = updated.findIndex(movie => movie.title === title)
-      if (index !== -1){
-        updated[index] = {
-          ...updated[index],
-          isBookmarked: !updated[index].isBookmarked
-        }
-      }
-      return updated;
-    })
+  if (isAuthLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-3xl text-indigo-400">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -36,20 +28,15 @@ function App() {
         <NavSidebar />
         <main className='h-full pt-6 w-full overflow-y-auto'>
             <Routes>
-              <Route path='/' element={<Home
-                toggleBookmark={toggleBookmark}
-                />} />
-              <Route path='/movies' element={<Movies 
-                toggleBookmark={toggleBookmark} 
-                />}/>
-              <Route path='/tvseries' element={<TvSeries 
-                toggleBookmark={toggleBookmark} 
-                />}/>
+              <Route path='/' element={<Home />} />
+              <Route path='/movies' element={<Movies />}/>
+              <Route path='/tvseries' element={<TvSeries />}/>
               <Route path='/bookmarked' element={<PrivateRoute >
-                  <Bookmarked toggleBookmark={toggleBookmark}/>
+                  <Bookmarked />
                 </PrivateRoute>}>
               </Route>
-              <Route path='/auth' element={<AuthPage />}/>
+              <Route path='/auth' 
+                element={ isLoggedIn ? <LogoutConfirmation /> : <AuthPage />} />
             </Routes>
         </main>
       </div>

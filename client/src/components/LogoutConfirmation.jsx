@@ -5,9 +5,10 @@ import { useAuth } from "../context/AuthContext"
 
 const LogoutConfirmation = () => {
   const navigate = useNavigate()
-  const {setIsLoggedIn} = useAuth()
+  const {setIsLoggedIn, setIsAuthLoading} = useAuth()
 
   const handleLogout = async () => {
+    setIsAuthLoading(true)
     try {
       const result = await logout()
       if (result.success){
@@ -17,6 +18,8 @@ const LogoutConfirmation = () => {
       }
     } catch (error) {
       toast.error("Something went Wrong!")
+    } finally{
+      setIsAuthLoading(false)
     }
   }
 
