@@ -1,6 +1,7 @@
 import avatar from '../assets/image-avatar.png'
 import logo from '../assets/svg_files/logo.svg'
 import { NavLink } from 'react-router-dom'
+import { useMedia } from '../context/MediaContext'
 
 const HomeIcon = ({className}) => (
   <svg
@@ -43,6 +44,7 @@ const BookmarkedIcon = ({className}) => (
 )
 
 const NavSidebar = () => {
+  const {setShowSearch, setSearchText, setSearchMediaContent} = useMedia()
 
   const navItems = [
     {icon: HomeIcon, to: '/'},
@@ -57,7 +59,13 @@ const NavSidebar = () => {
         <img className='mb-18' src={logo} alt="Logo" />
         <ul className='flex flex-col gap-y-12'>
           {navItems.map(({icon: Icon, to}, index) =>
-              <li key={index} >
+              <li key={index} 
+                onClick={() => {
+                  setShowSearch(false)
+                  setSearchText('')
+                  setSearchMediaContent([])
+                }}
+              >
                 <NavLink to={to}>
                   {({isActive}) => (
                     <Icon

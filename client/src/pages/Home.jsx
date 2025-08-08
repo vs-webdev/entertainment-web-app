@@ -1,33 +1,48 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import MediaCard from "../components/MediaCard"
 import SearchBar from "../components/SearchBar"
 import TrendingMediaCard from "../components/TrendingMediaCard"
 import SearchResults from "../components/SearchResults"
 import { useMedia } from "../context/MediaContext"
+import { fetchMedia } from "../api/media"
 
-const Home = ({toggleBookmark, }) => {
-  const {fetchHomeMedia, trendingMedia, recommendedMedia, showSearch, searchText, setSearchText} = useMedia()
-
-  const handleOnSearchChange = (text) => {
-    setSearchText(text)
-  }
+const Home = () => {
+  const {bookmarkMedia, setTotalPages, showSearch, toggleBookmark} = useMedia()
+  const [rawMediaData, setRawMediaData] = useState([])
+  const [trendingMedia, setTrendingMedia] = useState([])
+  const [recommendedMedia, setRecommendedMedia] = useState([])
 
   useEffect(() => {
-    fetchHomeMedia()
+    const loadData = async () => {
+      const mediaData = await fetchMedia('trending')
+      setRawMediaData(mediaData?.results || [])
+      setTotalPages(mediaData?.total_pages)
+    }
+    
+    loadData()
   }, [])
+  
+  useEffect(() => {
+    if (!rawMediaData.length) return;
+    const bookmarkedIds = new Set(bookmarkMedia.map(b => b.mediaId.toString()))
+    // Tag each movie
+    const taggedMedia = rawMediaData.map(m => ({
+      ...m,
+      isBookmarked: bookmarkedIds.has(m.id.toString())
+    }))
+  
+    setTrendingMedia(taggedMedia?.slice(0, 5))
+    setRecommendedMedia(taggedMedia)
+  }, [rawMediaData, bookmarkMedia])
 
   return (
     <div className="h-full w-full">
       <SearchBar 
         placeholder={"Search for movies or TV series"}
-        searchText={searchText}
-        setSearchText={setSearchText}
-        handleOnSearchChange={handleOnSearchChange}
       />
 
       {showSearch ? 
-      <SearchResults 
-        searchText={searchText}
+      <SearchResults
         toggleBookmark={toggleBookmark}
       /> :
       <><div className="flex flex-col items-start mb-8">
@@ -40,13 +55,13 @@ const Home = ({toggleBookmark, }) => {
               <li key={index}>
                 <TrendingMediaCard
                   title={movie?.title || movie?.name}
+                  mediaId={movie.id}
                   year={movie?.release_date || movie?.first_air_date}
                   category={movie?.media_type}
                   rating={movie?.certification}
                   isBookmarked={movie?.isBookmarked}
-                  toggleBookmark={toggleBookmark}
                   posterImg={movie?.backdrop_path}
-                  />
+                />
               </li>
             ))}
           </ul>
@@ -61,13 +76,13 @@ const Home = ({toggleBookmark, }) => {
           {recommendedMedia?.map((movie, index) => (
             <li key={index}>
               <MediaCard
-                  title={movie.title || movie.name}
-                  year={movie.release_date || movie.first_air_date}
-                  category={movie.media_type}
-                  rating={movie.certification}
-                  isBookmarked={movie.isBookmarked}
-                  toggleBookmark={toggleBookmark}
-                  posterImg={movie.backdrop_path}
+                  title={movie?.title || movie?.name}
+                  mediaId={movie.id}
+                  year={movie?.release_date || movie?.first_air_date}
+                  category={movie?.media_type}
+                  rating={movie?.certification}
+                  isBookmarked={movie?.isBookmarked}
+                  posterImg={movie?.backdrop_path}
               />
             </li>
           ))}

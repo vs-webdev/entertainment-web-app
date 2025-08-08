@@ -25,7 +25,7 @@ const AuthPage = () => {
       password: userData.password.trim()
     }
 
-    if (isRegister){
+    if (isUserRegister){
       try {
         const registration = await registerUser(payload)
         if (registration.success){
@@ -42,6 +42,8 @@ const AuthPage = () => {
       if (result?.success){
         navigate(from, {replace: true})
         setIsLoggedIn(true)
+        const bookmarkData = await fetchBookmarkedMedia()
+        setBookmarkMedia(bookmarkData?.bookmarks || []);
       } else {
         toast.error("Login failed")
         setIsLoggedIn(false)
@@ -89,7 +91,9 @@ const AuthPage = () => {
                   type="password" 
                 />
               </div>
-              <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium cursor-pointer">{isRegister ? 'Sign Up' : 'Login'}</button>
+              <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium cursor-pointer">
+                {isUserRegister ? 'Sign Up' : 'Login'}
+              </button>
             </form>
             {isUserRegister ? (
               <p className="text-gray-400 text-center text-md mt-8">

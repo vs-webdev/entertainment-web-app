@@ -1,4 +1,3 @@
-import { toast } from "react-toastify"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,14 +12,30 @@ export const fetchMedia = async (mediaType, currentPage=1) => {
   return result?.data
 }
 
-export const fetchSearchMedia = async () => {
+export const fetchBookmarkedMedia = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/media/bookmarks`, {
+      method: 'GET',
+      headers: {
+        accept: 'application/json'
+      },
+      credentials: 'include'
+    })
+    return await response.json()
+
+  } catch (error) {
+    console.log('fetch bookmark error', error.message)
+  }
+}
+
+export const fetchSearchMedia = async (searchText) => {
   const response = await fetch(`${API_BASE_URL}/api/media/home/search/?search_media=${searchText}`)
   return await response.json()
 }
 
 export const toggleBookmark = async (media, isLoggedIn) => {
   if (!isLoggedIn) {
-    return toast.error("Log In to bookmark")
+    return {success: false, message: "Log in to Bookmark"}
   }
   try {
     const response = await fetch(`${API_BASE_URL}/api/media/togglebookmark`,{
@@ -34,12 +49,7 @@ export const toggleBookmark = async (media, isLoggedIn) => {
     })
   
     const result = await response.json()
-    if (response.ok){
-      toast.success(result.message)
-    } else {
-      toast.error("Bookmarked failed")
-    }
-    return result
+    return {success: response.ok, message: result.message}
     
   } catch (error) {
     console.error('toggle bookmark error', error.message)

@@ -1,8 +1,10 @@
 import { useMedia } from "../context/MediaContext"
+import useSearchMedia from "../utils/useSearchMedia"
 import MediaCard from "./MediaCard"
 
-const SearchResults = ({searchText, toggleBookmark}) => {
-  const {searchMediaContent} = useMedia()
+const SearchResults = () => {
+  const {searchMediaContent, searchText} = useMedia()
+  useSearchMedia()
 
   return (
     <div className="h-full w-full">
@@ -14,13 +16,13 @@ const SearchResults = ({searchText, toggleBookmark}) => {
           {searchMediaContent?.map((movie, index) => (
             <li key={index}>
               <MediaCard
-                title={movie?.title || movie?.name}
-                year={movie?.release_date || movie?.first_air_date}
-                category={movie?.media_type}
-                rating={movie?.rating}
-                isBookmarked={movie?.isBookmarked}
-                toggleBookmark={toggleBookmark}
-                posterImg={movie?.backdrop_path}
+                  title={movie?.title || movie?.name}
+                  mediaId={movie.id || movie.mediaId}
+                  year={movie?.release_date || movie?.first_air_date || movie?.releaseDate}
+                  category={movie?.media_type || movie?.mediaType}
+                  rating={movie?.certification}
+                  isBookmarked={movie?.isBookmarked}
+                  posterImg={movie?.backdrop_path || movie?.posterPath}
               />
             </li>
           ))}

@@ -1,6 +1,17 @@
 import searchIcon from '../assets/svg_files/icon-search.svg'
+import { useMedia } from '../context/MediaContext'
 
-const SearchBar = ({placeholder, handleOnSearchChange, searchText}) => {
+const SearchBar = ({placeholder, searchText}) => {
+  const {setSearchText, setShowSearch} = useMedia()
+
+  const handleOnSearchChange = (text) => {
+    setSearchText(text)
+    if (text.trim().length === 0){
+      setShowSearch(false)
+    } else {
+      setShowSearch(true)
+    }
+  }
   return (
     <div className='flex items-center text-2xl w-full mb-8'>
       <label htmlFor="searchResult" className='w-full flex items-center gap-5'>

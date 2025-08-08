@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { fetchBookmarkedMedia } from "../api/media";
 
 const AuthContext = createContext(null)
 
@@ -27,7 +28,7 @@ export const AuthProvider = ({children}) => {
       return await response.json()
     }
 
-    const check = async () => {
+    const checkAuth = async () => {
       try {
         const res = await isAuth()
         console.log('check is auth', res.success)
@@ -38,7 +39,7 @@ export const AuthProvider = ({children}) => {
         setIsAuthLoading(false)
       }
     }
-    check()
+    checkAuth()
   }, [])
 
   const value = {

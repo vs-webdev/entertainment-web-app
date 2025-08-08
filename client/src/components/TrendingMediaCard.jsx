@@ -1,11 +1,35 @@
+import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 import bookmarkEmpty from '../assets/svg_files/icon-bookmark-empty.svg'
 import bookmarkFull from '../assets/svg_files/icon-bookmark-full.svg'
 import movieTag from '../assets/svg_files/icon-nav-movies.svg'
 import play from '../assets/svg_files/icon-play.svg'
-import { useState } from 'react'
+import { fetchBookmarkedMedia, toggleBookmark } from '../api/media'
+import { toast } from 'react-toastify'
+import { useMedia } from '../context/MediaContext'
 
-const TrendingMediaCard = ({year, category, rating, title, isBookmarked, toggleBookmark, posterImg}) => {
+const TrendingMediaCard = ({year, category, rating, title, mediaId, isBookmarked, posterImg}) => {
   const [isHover, setIsHover] = useState(false)
+  const {isLoggedIn} = useAuth()
+  const {setBookmarkMedia} = useMedia()
+
+  const handleToggleBookmark = async (media) => {
+    try {
+      const result = await toggleBookmark(media, isLoggedIn);
+      if (result.success) {
+        toast.success(result.message);
+
+        // Refresh bookmarks in context
+        const bookmarkData = await fetchBookmarkedMedia();
+        setBookmarkMedia(bookmarkData?.bookmarks || []);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark", error);
+    }
+  };
+
 
   return (
     <div
@@ -22,8 +46,8 @@ const TrendingMediaCard = ({year, category, rating, title, isBookmarked, toggleB
       </div>
 
       <div 
-        className='z-10 flex items-center justify-center h-8 w-8 rounded-full bg-gray-500 ml-auto'
-        onClick={() => toggleBookmark(title)}
+        className='z-10 flex items-center justify-center h-8 w-8 rounded-full bg-gray-500 ml-auto cursor-pointer'
+        onClick={() => handleToggleBookmark({title, mediaId, posterPath: posterImg, releaseDate: year, mediaType: category}, isLoggedIn)}
       >
         <img src={isBookmarked ? bookmarkFull : bookmarkEmpty} alt="Empty Bookmark" />
       </div>
@@ -33,7 +57,7 @@ const TrendingMediaCard = ({year, category, rating, title, isBookmarked, toggleB
           <span>{year.slice(0, 4)}</span>
           <span className='flex items-center gap-2 capitalize before:content-["\00B7"] before:font-extrabold before:inline-block before:align-middle after:content-["\00B7"] after:inline-block after:font-extrabold after:align-middle'>
             <img src={movieTag} alt="Moive Tag" className='w-4 h-4' />
-            {category}
+            {category === 'tv' ? 'TV Series' : 'Movie'}
             </span>
           <span>{rating}</span>
         </div>
