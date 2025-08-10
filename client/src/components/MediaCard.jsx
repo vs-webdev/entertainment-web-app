@@ -32,7 +32,7 @@ const MediaCard = ({year, category, rating, title, mediaId, isBookmarked, poster
 
   return (
     <div className="flex flex-col items-start justify-center">
-      <div className="rouded h-[174px] w-full rounded-2xl bg-cover bg-center relative mb-2"
+      <div className="rouded h-[210px] lg:h-[174px] w-full rounded-2xl bg-cover bg-center relative mb-2"
         style={{backgroundImage: `url(https://image.tmdb.org/t/p/w500${posterImg})`}}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}

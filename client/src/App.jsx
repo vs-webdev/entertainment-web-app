@@ -24,7 +24,7 @@ function App() {
 
   return (
     <>
-      <div className='w-full h-full flex gap-6'>
+      <div className='w-full h-full lg:flex gap-6'>
         <NavSidebar />
         <main className='h-full pt-6 w-full overflow-y-auto'>
             <Routes>

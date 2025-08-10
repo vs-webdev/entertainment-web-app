@@ -54,10 +54,11 @@ const NavSidebar = () => {
   ]
 
   return (
-    <nav className='flex flex-col justify-center items-start h-full w-[93px] py-10 px-8 rounded-3xl bg-[#161d2f]'>
-      <div className='flex flex-col items-center justify-center '>
-        <img className='mb-18' src={logo} alt="Logo" />
-        <ul className='flex flex-col gap-y-12'>
+    <nav className='flex lg:flex-col justify-between lg:justify-center items-center h-[70px] lg:h-full w-full lg:w-[93px] py-5 lg:py-10 px-6 rounded-3xl mb-4 bg-[#161d2f]'>
+      <div>
+        <img className='lg:mb-18' src={logo} alt="Logo" />
+      </div>
+        <ul className='flex lg:flex-col items-center gap-8 md:gap-12 lg:gap-y-12'>
           {navItems.map(({icon: Icon, to}, index) =>
               <li key={index} 
                 onClick={() => {
@@ -69,14 +70,13 @@ const NavSidebar = () => {
                 <NavLink to={to}>
                   {({isActive}) => (
                     <Icon
-                      className={`md:h-[20px] md:w-[20px] fill-current ${isActive ? 'text-white' : 'text-[#5A698F]'} h-4 w-4 hover:fill-red-400`}
+                      className={`h-[20px] w-[20px] fill-current ${isActive ? 'text-white' : 'text-[#5A698F]'} h-4 w-4 hover:fill-red-400`}
                     />)}
                 </NavLink>
               </li>)}
         </ul>
-      </div>
       <NavLink to={'/auth'}>
-        <img className='mt-53 border-white border-2 rounded-full' src={avatar} alt="Avatar" />
+        <img className='lg:mt-53 border-white border-2 rounded-full w-8' src={avatar} alt="Avatar" />
       </NavLink>
     </nav>
   )
