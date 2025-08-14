@@ -53,7 +53,7 @@ const Bookmarked = () => {
         <h2 className="text-3xl mb-7">
           Bookmarked Movies
         </h2>
-          <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] w-full gap-8">
+          <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] w-full gap-6">
             {bookmarkMedia?.filter(movie =>  movie.mediaType === 'movie').map((movie, index) => (
               <li key={index}>
                 <MediaCard
@@ -74,7 +74,7 @@ const Bookmarked = () => {
         <h2 className="text-3xl mb-7">
           Bookmarked TV Series
         </h2>
-        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_318px))] gap-8 w-full">
+        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_318px))] gap-6 w-full">
           {bookmarkMedia?.filter(movie => movie.mediaType === 'tv').map((movie, index) => (
             <li key={index}>
               <MediaCard
@@ -83,7 +83,7 @@ const Bookmarked = () => {
                   year={movie?.releaseDate}
                   category={movie?.mediaType}
                   rating={movie?.rating}
-                  isBookmarked={movie?.isBookmarked}
+                  isBookmarked={true}
                   posterImg={movie?.posterPath}
               />
             </li>

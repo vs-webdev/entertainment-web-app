@@ -50,7 +50,7 @@ const Home = () => {
           Trending
         </h2>
         <div className="w-full flex overflow-x-auto">
-          <ul className="w-auto flex gap-8">
+          <ul className="w-auto flex gap-6">
             {trendingMedia?.map((movie, index) => (
               <li key={index}>
                 <TrendingMediaCard
@@ -72,7 +72,7 @@ const Home = () => {
         <h2 className="text-3xl mb-7">
           Recommended for you
         </h2>
-        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
+        <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-6 w-full">
           {recommendedMedia?.map((movie, index) => (
             <li key={index}>
               <MediaCard

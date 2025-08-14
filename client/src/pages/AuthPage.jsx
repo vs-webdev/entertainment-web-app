@@ -91,7 +91,7 @@ const AuthPage = () => {
                   type="password" 
                 />
               </div>
-              <button className="w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium cursor-pointer">
+              <button className="w-full py-2 rounded-full bg-red-500 text-lg text-white font-medium cursor-pointer hover:bg-gray-100 hover:text-slate-900">
                 {isUserRegister ? 'Sign Up' : 'Login'}
               </button>
             </form>

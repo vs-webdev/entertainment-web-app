@@ -48,7 +48,7 @@ const TvSeries = () => {
           <h2 className="text-3xl mb-7">
             TV Series
           </h2>
-          <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-8 w-full">
+          <ul className="grid grid-cols-[repeat(auto-fit,_minmax(318px,_1fr))] gap-6 w-full">
             {taggedTvMedia?.map((movie, index) => (
               <li key={index}>
                 <MediaCard
